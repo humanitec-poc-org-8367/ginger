@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "Ginger"
+  annotations:
+    "humanitec.com/orgId": "htc-demo-04"
+    "humanitec.com/appId": "Ginger"
+spec:
+  type: service
+  owner: user:guest
+  lifecycle: experimental
