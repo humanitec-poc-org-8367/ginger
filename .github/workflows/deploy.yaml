@@ -2,7 +2,7 @@ name: Deploy Ginger
 
 on:
   push:
-    branches: main
+    branches: [ main ]
 
 concurrency:
   group: ${{ github.ref }}
@@ -68,3 +68,9 @@ jobs:
           EOF
 
           ./score-humanitec delta --env development --overrides ./humanitec.score.yaml --app ginger --org="${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" --token "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" --deploy
+          
+
+      - name: Run integration tests
+        run: |
+          # presumably there is a race condition here, as we need to wait for Humanitec to finish deploying our app
+          npm run test
