@@ -1,9 +1,9 @@
 import {expect, test} from '@jest/globals';
 
-test('makes http request', () => {
+test('makes http request', async () => {
 
-    fetch('https://wuckertdaughertyharveystammmacgyver.newapp.io').then(r => {
-        expect(r.text()).resolves.toContain('Hello World')
-    })
+    const r = await fetch('https://wuckertdaughertyharveystammmacgyver.newapp.io')
+    const t = await r.text()
+    expect(t).toContain('Hello World')
 
-})
+}, 30000) // jest intermittently times out waiting for all promises to resolve. Can take over 10s.
