@@ -48,16 +48,8 @@ jobs:
                 "tags": ["'$TAG'"]
             }'
 
-      - name: Retrieve DNS name
-        run: |-
-          export DNS=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/gary1971/envs/development/resources \
-            --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
-            jq -r --arg type "dns" '.[] | select(.type == $type).resource.host')
-          echo "dns=${DNS}"
-
       - name: Deploy using Score
         run: |
-          echo "dns=${DNS}"
           wget https://github.com/score-spec/score-humanitec/releases/download/0.4.0/score-humanitec_0.4.0_linux_amd64.tar.gz
           tar -xvzf ./score-humanitec_0.4.0_linux_amd64.tar.gz
 
@@ -77,9 +69,13 @@ jobs:
           EOF
 
           ./score-humanitec delta --env development --overrides ./humanitec.score.yaml --app ginger --org="${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" --token "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" --deploy
-          
 
       - name: Run integration tests
         run: |
+          # retrieve the DNS name
+          export APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/gary1971/envs/development/resources \
+            --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
+            jq -r --arg type "dns" '.[] | select(.type == $type).resource.host')
+
           # presumably there is a race condition here, as we need to wait for Humanitec to finish deploying our app
           npm run test
