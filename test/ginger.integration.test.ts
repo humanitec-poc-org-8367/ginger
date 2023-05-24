@@ -1,6 +1,7 @@
 import {expect, test} from '@jest/globals';
 
 test('makes http request', async () => {
+    //process.env.APP_URL = 'wuckertdaughertyharveystammmacgyver.newapp.io'
     const appUrl= `https://${process.env.APP_URL}`
     console.log(`APP_URL is ${appUrl}`)
     const r = await fetch(appUrl)
