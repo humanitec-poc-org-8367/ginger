@@ -1,7 +1,7 @@
 import {expect, test} from '@jest/globals';
 
 test('makes http request', async () => {
-    const r = await fetch(`${process.env.APP_URL}`)
+    const r = await fetch(`https://${process.env.APP_URL}`)
     const t = await r.text()
     expect(t).toContain('Hello World')
 
