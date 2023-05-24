@@ -51,7 +51,7 @@ jobs:
       - name: Retrieve DNS name
         run: |-
           curl https://api.humanitec.io/orgs/htc-demo-04/apps/gary1971/envs/development/resources \
-            --header 'Authorization: Bearer ${{ secrets.HUMANITEC_ORG_ID_POC_4 }}'
+            --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}'
 
       - name: Deploy using Score
         run: |
