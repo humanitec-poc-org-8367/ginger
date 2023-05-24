@@ -50,10 +50,8 @@ jobs:
 
       - name: Retrieve DNS name
         run: |-
-          export DNS=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/gary1971/envs/development/resources \
-            --header 'Authorization: Bearer ${{ secrets.HUMANITEC_ORG_ID_POC_4 }}' | \
-            jq -r --arg type "dns" '.[] | select(.type == $type).resource.host')
-          echo "dns=${DNS}"
+          curl https://api.humanitec.io/orgs/htc-demo-04/apps/gary1971/envs/development/resources \
+            --header 'Authorization: Bearer ${{ secrets.HUMANITEC_ORG_ID_POC_4 }}'
 
       - name: Deploy using Score
         run: |
