@@ -47,8 +47,16 @@ jobs:
                 "image": "'$ECR/$IMAGE:$TAG'",
                 "tags": ["'$TAG'"]
             }'
+
+      - name: Retrieve DNS name
+        run: |-
+          export DNS=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/gary1971/envs/development/resources \
+            -H "Authorization: Bearer $HUMANITEC_TOKEN" | \
+            jq -r --arg type "dns" '.[] | select(.type == $type).resource.host')
+          echo "dns=${DNS}"
       - name: Deploy using Score
         run: |
+          echo "dns=${DNS}"
           wget https://github.com/score-spec/score-humanitec/releases/download/0.4.0/score-humanitec_0.4.0_linux_amd64.tar.gz
           tar -xvzf ./score-humanitec_0.4.0_linux_amd64.tar.gz
 
