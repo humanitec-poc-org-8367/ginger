@@ -20,6 +20,14 @@ containers:
       DB_PASSWORD: ${resources.db.password}
       DB_HOST: ${resources.db.host}
       DB_PORT: ${resources.db.port}
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 3000
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 3000
 
 # Define the resources that this service needs
 resources:
