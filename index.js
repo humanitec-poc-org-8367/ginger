@@ -14,9 +14,10 @@ const requestHandler = async (request, response) => {
   console.log(request.url);
 
   // Run hello world query
-  const [rows, fields] = await connection.promise().query('SELECT "This is an example application deployed with Score!" as message');
+  //const [rows, fields] = await connection.promise().query('SELECT "This is an example application deployed with Score!" as message');
 
-  const message = rows[0].message;
+  //const message = rows[0].message;
+  const message = 'Testing 1 2 3'
 
   const html = `
   <html>
