@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
 });
 
 const requestHandler = async (request, response) => {
-  console.log(request.url);
+  console.log('Received request from ' + request.hostname);
 
   // Run hello world query
   //const [rows, fields] = await connection.promise().query('SELECT "This is an example application deployed with Score!" as message');
@@ -31,7 +31,7 @@ const requestHandler = async (request, response) => {
     </body>
   </html>
   `
-
+  console.log('Sending response');
   response.end(html);
 }
 
