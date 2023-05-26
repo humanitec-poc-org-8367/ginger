@@ -27,7 +27,7 @@ containers:
     readinessProbe:
       httpGet:
         path: /
-        port: 3000
+        port: 3008
 
 # Define the resources that this service needs
 resources:
