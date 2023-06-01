@@ -5,6 +5,10 @@ metadata:
   annotations:
     "humanitec.com/orgId": "htc-demo-04"
     "humanitec.com/appId": "ginger"
+  links:
+    - url: https://wuckertdaughertyharveystammmacgyver.newapp.io/
+      title: Ginger DEV
+
 spec:
   type: service
   owner: user:guest
