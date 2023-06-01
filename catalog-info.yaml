@@ -9,3 +9,7 @@ spec:
   type: service
   owner: user:guest
   lifecycle: experimental
+  dependsOn:
+    - fred
+#  consumesApis:
+#    - TimeOfDay
