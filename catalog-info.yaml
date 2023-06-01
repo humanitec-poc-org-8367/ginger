@@ -14,7 +14,6 @@ spec:
   owner: user:guest
   lifecycle: experimental
   dependsOn:
-    - kind: Component
-      name: fred
+    - component:fred
 #  consumesApis:
 #    - TimeOfDay
