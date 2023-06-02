@@ -66,6 +66,8 @@ jobs:
           containers:
             frontend:
               image: $ECR/$IMAGE:$TAG
+              variables:
+                GITHUB_SHA: $GITHUB_SHA
           EOF
 
           ./score-humanitec delta --env development --overrides ./humanitec.score.yaml --app ginger --org="${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" --token "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" --deploy
