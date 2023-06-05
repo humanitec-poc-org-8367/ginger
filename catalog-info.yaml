@@ -13,7 +13,7 @@ spec:
   type: service
   owner: user:guest
   lifecycle: experimental
-  dependsOn:
-    - component:fred
-#  consumesApis:
-#    - TimeOfDay
+#  dependsOn:
+#    - component:fred
+  consumesApis:
+    - TimeOfDay

@@ -20,6 +20,7 @@ containers:
       DB_PASSWORD: ${resources.db.password}
       DB_HOST: ${resources.db.host}
       DB_PORT: ${resources.db.port}
+      TOD_SERVICE_URL: https://${resources.fred.dns}:${resources.fred.service.ports.www.port}
     livenessProbe:
       httpGet:
         path: /
@@ -43,4 +44,4 @@ resources:
       port:
 
   fred:
-    type: workload
+    type: service
