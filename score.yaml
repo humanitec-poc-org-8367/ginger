@@ -44,4 +44,4 @@ resources:
       port:
 
   fred:
-    type: service
+    type: workload
