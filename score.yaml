@@ -35,6 +35,8 @@ containers:
 resources:
   dns: # We need a DNS record to point to the service 
     type: dns
+  time-of-day-svc:
+    type: tods
 #  db:  # We need a database to store data
 #    type: mysql
 #    properties:
