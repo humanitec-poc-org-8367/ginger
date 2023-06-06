@@ -15,11 +15,11 @@ containers:
   frontend:
     variables:
       PORT: "3000"
-      DB_DATABASE: ${resources.db.name}
-      DB_USER: ${resources.db.username}
-      DB_PASSWORD: ${resources.db.password}
-      DB_HOST: ${resources.db.host}
-      DB_PORT: ${resources.db.port}
+#      DB_DATABASE: ${resources.db.name}
+#      DB_USER: ${resources.db.username}
+#      DB_PASSWORD: ${resources.db.password}
+#      DB_HOST: ${resources.db.host}
+#      DB_PORT: ${resources.db.port}
       TOD_SERVICE_URL: https://${resources.fred.dns}
     livenessProbe:
       httpGet:
@@ -35,14 +35,14 @@ containers:
 resources:
   dns: # We need a DNS record to point to the service 
     type: dns
-  db:  # We need a database to store data
-    type: mysql
-    properties:
-      name:
-      username:
-      password:
-      host:
-      port:
+#  db:  # We need a database to store data
+#    type: mysql
+#    properties:
+#      name:
+#      username:
+#      password:
+#      host:
+#      port:
   fred:
     type: service
     properties:

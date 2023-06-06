@@ -1,14 +1,14 @@
 const http = require('http');
-const mysql = require('mysql2');
+// const mysql = require('mysql2');
 
 // create the connection to database
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost'  ,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'secret',
-  database: process.env.DB_DATABASE || 'score',
-  port: process.env.DB_PORT || 3306
-});
+// const connection = mysql.createConnection({
+//   host: process.env.DB_HOST || 'localhost'  ,
+//   user: process.env.DB_USER || 'root',
+//   password: process.env.DB_PASSWORD || 'secret',
+//   database: process.env.DB_DATABASE || 'score',
+//   port: process.env.DB_PORT || 3306
+// });
 
 const requestHandler = async (request, response) => {
   console.log('Received request from ' + request.hostname);
