@@ -20,7 +20,7 @@ containers:
       DB_PASSWORD: ${resources.db.password}
       DB_HOST: ${resources.db.host}
       DB_PORT: ${resources.db.port}
-#      TOD_SERVICE_URL: https://${resources.fred.dns}:${resources.fred.service.ports.www.port}
+      TOD_SERVICE_URL: https://${resources.fred.dns}
     livenessProbe:
       httpGet:
         path: /
@@ -29,6 +29,7 @@ containers:
       httpGet:
         path: /
         port: 3000
+
 
 # Define the resources that this service needs
 resources:
@@ -42,7 +43,6 @@ resources:
       password:
       host:
       port:
-
   fred:
     type: service
     properties:
