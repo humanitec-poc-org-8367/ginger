@@ -35,8 +35,9 @@ containers:
 resources:
   dns: # We need a DNS record to point to the service 
     type: dns
-  time-of-day-svc:
-    type: s3    
+  # TODO: add this back after we test delete on the rsrc driver  
+  # time-of-day-svc:
+  #   type: s3    
 
 #  db:  # We need a database to store data
 #    type: mysql
