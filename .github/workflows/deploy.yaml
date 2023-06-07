@@ -72,13 +72,16 @@ jobs:
 
           ./score-humanitec delta --env development --overrides ./humanitec.score.yaml --app ginger --org="${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" --token "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" --deploy
 
-# TODO: reinstate this when ginger works reliably
-      # - name: Run integration tests
-      #   run: |
-      #     # retrieve the DNS name
-      #     export APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/development/resources \
-      #       --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
-      #       jq -r --arg type "dns" '.[] | select(.type == $type).resource.host')
+      - name: Run integration tests
+        run: |
+          # retrieve the DNS name
+          export APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/development/resources \
+            --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
+            jq -r --arg type "dns" '.[] | select(.type == $type).resource.host')
+          
+          # presumably there is a race condition here, as we need to wait for Humanitec to finish deploying our app
+          npm run test
 
-      #     # presumably there is a race condition here, as we need to wait for Humanitec to finish deploying our app
-      #     npm run test
+      - name: promote to UAT
+        run: |
+          ./deploy_to.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" uat
