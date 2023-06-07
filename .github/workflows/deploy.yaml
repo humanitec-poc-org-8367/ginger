@@ -77,7 +77,7 @@ jobs:
           # retrieve the DNS name
           export APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/development/resources \
             --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
-            jq -r --arg type "dns" '.[] | select(.type == $type).resource.host')
+            jq -r --arg id "modules.ginger.externals.dns" '.[] | select(.res_id == $id).resource.host')
           
           # presumably there is a race condition here, as we need to wait for Humanitec to finish deploying our app
           npm run test
