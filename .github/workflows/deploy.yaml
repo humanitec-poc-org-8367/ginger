@@ -54,7 +54,7 @@ jobs:
           
           CI_ENV_ID="ginger-ci-$GITHUB_SHA"
           
-          ./create_ci_env.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "$CI_ENV_ID"
+          ./create_ci_env.sh "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" "$CI_ENV_ID"
           
       - name: Deploy using score
         run: |

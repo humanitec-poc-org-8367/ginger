@@ -16,7 +16,7 @@ CI_ENV_ID=$2
 
 # fetch last deployment id
 BASE_ENV=uat
-LAST_DEPLOY_ID=$(curl -fSs --header "Authorization: Bearer $HUMANITEC_TOKEN" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/uat | jq -r '.last_deploy.id')
+LAST_DEPLOY_ID=$(curl -fSs --header "Authorization: Bearer $HUMANITEC_TOKEN" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$BASE_ENV | jq -r '.last_deploy.id')
 
 export LAST_DEPLOY_ID BASE_ENV CI_ENV_ID
 
