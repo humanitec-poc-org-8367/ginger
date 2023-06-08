@@ -11,7 +11,6 @@ concurrency:
 env:
   ECR: 459210687693.dkr.ecr.eu-west-3.amazonaws.com
   IMAGE: myapp
-  CI_ENV_ID: ginger-ci-${{ vars.GITHUB_SHA }}
 
 jobs:
   deploy:
@@ -52,17 +51,19 @@ jobs:
       - name: Create ephemeral CI Environment
         run: |
           set -e
-          
-          ./create_ci_env.sh "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" "${CI_ENV_ID:0:20}"
+          CI_ENV_ID=ginger-ci-${GITHUB_SHA:0:10}
+          ./create_ci_env.sh "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" "$CI_ENV_ID"
           
       - name: Deploy using score
         run: |
-          ./deploy_to.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" ${CI_ENV_ID:0:20}
+          CI_ENV_ID=ginger-ci-${GITHUB_SHA:0:10}
+          ./deploy_to.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" $CI_ENV_ID
 
       - name: Run integration tests
         run: |
+          CI_ENV_ID=ginger-ci-${GITHUB_SHA:0:10}
           # retrieve the DNS name
-          export APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/${CI_ENV_ID:0:20}/resources \
+          export APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID/resources \
             --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
             jq -r --arg id "modules.ginger.externals.dns" '.[] | select(.res_id == $id and .type == "dns").resource.host')
           
@@ -71,7 +72,8 @@ jobs:
 
       - name: Delete CI env
         run: |
-          curl -fSs -X DELETE https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/${CI_ENV_ID:0:20} \
+          CI_ENV_ID=ginger-ci-${GITHUB_SHA:0:10}
+          curl -fSs -X DELETE https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID \
             --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}'
 
       - name: promote to UAT
