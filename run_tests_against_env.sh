@@ -23,7 +23,7 @@ while [ $ATTEMPTS -lt 90 ] ; do
   APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID/resources \
     --header "Authorization: Bearer $HUMANITEC_TOKEN" | \
     jq -r --arg id "modules.ginger.externals.dns" '.[] | select(.res_id == $id and .type == "dns").resource.host')
-  ATTEMPTS=ATTEMPTS+1
+  ATTEMPTS=$((ATTEMPTS + 1))
   [[ -n "$APP_URL" ]] && break
 done
 echo " done"
