@@ -10,8 +10,9 @@ fail_with_message() {
 HUMANITEC_TOKEN=$1
 [[ -n $HUMANITEC_TOKEN ]] || fail_with_message "Humanitec token required as arg 1"
 
-CI_ENV_ID=${2:0:20}
+CI_ENV_ID=$2
 [[ -n $CI_ENV_ID ]] || fail_with_message "CI_ENV_ID required as arg 2"
+[[ $CI_ENV_ID == "${CI_ENV_ID:0:20}" ]] || fail_with_message "CI_ENV_ID must be no more than 20 characters"
 
 
 # fetch last deployment id
