@@ -20,7 +20,7 @@ LAST_DEPLOY_ID=$(curl -fSs --header "Authorization: Bearer $HUMANITEC_TOKEN" htt
 
 export LAST_DEPLOY_ID BASE_ENV CI_ENV_ID
 
-curl -fSs -X POST --header "Authorization: Bearer $HUMANITEC_TOKEN" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs << EOF
+curl -fSs -X POST --data @- --header "Authorization: Bearer $HUMANITEC_TOKEN" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs << EOF
 {
   "from_deploy_id": "$LAST_DEPLOY_ID",
   "id": "$CI_ENV_ID",
