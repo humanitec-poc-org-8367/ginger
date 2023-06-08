@@ -48,19 +48,36 @@ jobs:
                 "tags": ["'$TAG'"]
             }'
 
-      - name: Deploy using Score
+      - name: Create ephemeral CI Environment
         run: |
-          ./deploy_to.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" development
+          set -e
+          
+          CI_ENV_ID="ginger-ci-$GITHUB_SHA"
+          
+          ./create_ci_env.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "$CI_ENV_ID"
+          
+      - name: Deploy using score
+        run: |
+          CI_ENV_ID="ginger-ci-$GITHUB_SHA"
+          ./deploy_to.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" $CI_ENV_ID
 
       - name: Run integration tests
         run: |
+          export CI_ENV_ID="ginger-ci-$GITHUB_SHA"
           # retrieve the DNS name
-          export APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/development/resources \
+          export APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID/resources \
             --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
             jq -r --arg id "modules.ginger.externals.dns" '.[] | select(.res_id == $id and .type == "dns").resource.host')
           
           # presumably there is a race condition here, as we need to wait for Humanitec to finish deploying our app
           npm run test
+
+      - name: Delete CI env
+        run: |
+          CI_ENV_ID="ginger-ci-$GITHUB_SHA"
+          
+          curl -fSs -X DELETE https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID \
+            --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}'
 
       - name: promote to UAT
         run: |
