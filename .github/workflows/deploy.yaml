@@ -64,18 +64,28 @@ jobs:
           CI_ENV_ID=ginger-ci-${GITHUB_SHA:0:10}
           
           echo -n Retrieve the DNS name of $CI_ENV_ID
-          while [[ -n $APP_URL ]] && [[ "$ATTEMPTS" -lt 90 ]] ; do
+          APP_URL=""
+          ATTEMPTS=0
+          while [[ -n "$APP_URL" ]] && [[ "$ATTEMPTS" -lt 90 ]] ; do
             sleep 2
             echo -n .
-            APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID/resources \
+            let APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID/resources \
               --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
               jq -r --arg id "modules.ginger.externals.dns" '.[] | select(.res_id == $id and .type == "dns").resource.host')
+            let ATTEMPTS=ATTEMPTS+1
             
           done
           export APP_URL
           
-          # presumably there is a race condition here, as we need to wait for Humanitec to finish deploying our app
-          npm run test
+          
+          if [[ -n $APP_URL ]]; then
+            echo Running tests against URL $APP_URL
+            # presumably there is a race condition here, as we need to wait for Humanitec to finish deploying our app
+            npm run test
+          else
+            echo failed to fetch APP_URL after $ATTEMPTS attempts  
+            exit 1
+          fi
 
       - name: Delete CI env
         run: |
