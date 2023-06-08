@@ -66,15 +66,16 @@ jobs:
           echo -n Retrieve the DNS name of $CI_ENV_ID
           APP_URL=""
           ATTEMPTS=0
-          while [[ -n "$APP_URL" ]] && [[ "$ATTEMPTS" -lt 90 ]] ; do
+          while [ $ATTEMPTS -lt 90 ] ; do
             sleep 2
             echo -n .
             let APP_URL=$(curl -fSs https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID/resources \
               --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}' | \
               jq -r --arg id "modules.ginger.externals.dns" '.[] | select(.res_id == $id and .type == "dns").resource.host')
             let ATTEMPTS=ATTEMPTS+1
-            
+            [[ -n "$APP_URL" ]] && break
           done
+          echo done
           export APP_URL
           
           
