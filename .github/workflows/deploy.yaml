@@ -50,27 +50,7 @@ jobs:
 
       - name: Deploy using Score
         run: |
-          wget https://github.com/score-spec/score-humanitec/releases/download/0.4.0/score-humanitec_0.4.0_linux_amd64.tar.gz
-          tar -xvzf ./score-humanitec_0.4.0_linux_amd64.tar.gz
-
-          cat <<EOF > humanitec.score.yaml
-          apiVersion: humanitec.org/v1b1
-          spec:
-            ingress:
-              rules:
-                "\${resources.dns}": # This is the DNS record that we defined in the resources section
-                  http:
-                    "/":
-                      type: prefix
-                      port: 80
-          containers:
-            frontend:
-              image: $ECR/$IMAGE:$TAG
-              variables:
-                GITHUB_SHA: $GITHUB_SHA
-          EOF
-
-          ./score-humanitec delta --env development --overrides ./humanitec.score.yaml --app ginger --org="${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" --token "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" --deploy
+          ./deploy_to.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" development
 
       - name: Run integration tests
         run: |
