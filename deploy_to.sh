@@ -34,5 +34,5 @@ containers:
       GITHUB_SHA: $GITHUB_SHA
 EOF
 
-echo Deploying ginger to UAT
+echo Deploying ginger to $TARGET_ENV
 ./score-humanitec delta --env $TARGET_ENV --overrides ./humanitec.score.yaml --app ginger --org="$HUMANITEC_ORG" --token "$HUMANITEC_SECRET" --deploy

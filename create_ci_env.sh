@@ -28,5 +28,5 @@ curl -fSs -X POST --header "Authorization: Bearer $HUMANITEC_TOKEN" https://api.
                 "from_deploy_id": "'$LAST_DEPLOY_ID'",
                 "id": "'$CI_ENV_ID'",
                 "type": "development",
-                "name": "Ephemeral CI env for application ginger"
+                "name": "'$CI_ENV_ID'"
               }'
