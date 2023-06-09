@@ -63,6 +63,8 @@ DEPLOY_ID=$(curl -f -X POST --header "Authorization: Bearer $HUMANITEC_SECRET" h
   --data-raw '{ "comment": "Deploy delta from score", "delta_id": "'$DELTA_ID'" }')
 
 echo Awaiting deployment completion
+
+ATTEMPTS=0
 while [ $ATTEMPTS -lt 160 ] ; do
   DEPLOY_STATUS=$(curl -f -X POST --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$TARGET_ENV/deploys/$DEPLOY_ID | jq -r '.status')
   [[ $DEPLOY_STATUS == "succeeded" ]] && break
