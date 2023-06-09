@@ -66,7 +66,7 @@ echo Awaiting deployment completion
 
 ATTEMPTS=0
 while [ $ATTEMPTS -lt 160 ] ; do
-  DEPLOY_STATUS=$(curl -f --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$TARGET_ENV/deploys/$DEPLOY_ID | jq -r '.status')
+  DEPLOY_STATUS=$(curl -fSs --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$TARGET_ENV/deploys/$DEPLOY_ID | jq -r '.status')
   [[ $DEPLOY_STATUS == "succeeded" ]] && break
   [[ $DEPLOY_STATUS == "failed" ]] && break
   echo $DEPLOY_STATUS
