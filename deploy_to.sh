@@ -60,7 +60,7 @@ curl  -f -X PATCH --header "Authorization: Bearer $HUMANITEC_SECRET" https://api
 echo Excecute deployment
 DEPLOY_ID=$(curl -f -X POST --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$TARGET_ENV/deploys \
   --header 'Content-Type: application/json' \
-  --data-raw '{ "comment": "Deploy delta from score", "delta_id": "'$DELTA_ID'" }')
+  --data-raw '{ "comment": "Deploy delta from score", "delta_id": "'$DELTA_ID'" }' | jq -r '.id')
 
 echo Awaiting deployment completion
 
