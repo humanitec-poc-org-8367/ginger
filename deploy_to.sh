@@ -27,8 +27,6 @@ spec:
           "/":
             type: prefix
             port: 80
-  deploy:
-    success: available
 containers:
   frontend:
     image: $ECR/$IMAGE:$TAG
