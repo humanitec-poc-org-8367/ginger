@@ -27,8 +27,6 @@ spec:
           "/":
             type: prefix
             port: 80
-deploy:
-  success: available
 containers:
   frontend:
     image: $ECR/$IMAGE:$TAG
@@ -36,5 +34,22 @@ containers:
       GITHUB_SHA: $GITHUB_SHA
 EOF
 
-echo Deploying ginger to $TARGET_ENV
-./score-humanitec delta --env $TARGET_ENV --overrides ./humanitec.score.yaml --app ginger --org="$HUMANITEC_ORG" --token "$HUMANITEC_SECRET" --deploy
+echo Configure delta for deployment
+DELTA=$(curl -fSs -X POST --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/deltas \
+  --data-raw '{
+                "metadata": {
+                  "env_id": "'$TARGET_ENV'",
+                  "name": "Ready to wait for readiness"
+                },
+                "modules": {
+                  "add": {
+                    "ginger": {
+                      "deploy": {
+                        "success": "available"
+                      }
+                    }
+                  }
+                }
+              }')
+echo Deploying ginger to $TARGET_ENV using delta $DELTA
+./score-humanitec delta --delta "$DELTA" --env $TARGET_ENV --overrides ./humanitec.score.yaml --app ginger --org="$HUMANITEC_ORG" --token "$HUMANITEC_SECRET" --deploy
