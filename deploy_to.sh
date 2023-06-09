@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 fail_with_message() {
   echo $*
   exit 1
@@ -34,22 +36,25 @@ containers:
       GITHUB_SHA: $GITHUB_SHA
 EOF
 
-echo Configure delta for deployment
-DELTA=$(curl -fSs -X POST --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/deltas \
-  --data-raw '{
-                "metadata": {
-                  "env_id": "'$TARGET_ENV'",
-                  "name": "Ready to wait for readiness"
-                },
+
+echo Create delta for deployment
+DELTA_ID=$(./score-humanitec delta --env $TARGET_ENV --overrides ./humanitec.score.yaml --app ginger --org="$HUMANITEC_ORG" --token "$HUMANITEC_SECRET" | jq -r '.id')
+curl  -f -X PATCH --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/deltas/$DELTA_ID \
+  --header 'Content-Type: application/json' \
+  --data-raw '[{
                 "modules": {
-                  "add": {
-                    "ginger": {
-                      "deploy": {
+                  "update": {
+                    "ginger": [{
+                      "op": "add",
+                      "path": "/deploy",
+                      "value": {
                         "success": "available"
                       }
-                    }
+                    }]
                   }
                 }
-              }')
-echo Deploying ginger to $TARGET_ENV using delta $DELTA
-./score-humanitec delta --delta "$DELTA" --env $TARGET_ENV --overrides ./humanitec.score.yaml --app ginger --org="$HUMANITEC_ORG" --token "$HUMANITEC_SECRET" --deploy
+              }]'
+
+curl -f -X POST --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$TARGET_ENV/deploys \
+  --header 'Content-Type: application/json' \
+  --data-raw '{ "comment": "Deploy delta from score", "delta_id": "'$DELTA_ID'" }'
