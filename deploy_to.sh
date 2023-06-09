@@ -39,6 +39,8 @@ EOF
 
 echo Create delta for deployment
 DELTA_ID=$(./score-humanitec delta --env $TARGET_ENV --overrides ./humanitec.score.yaml --app ginger --org="$HUMANITEC_ORG" --token "$HUMANITEC_SECRET" | jq -r '.id')
+
+echo Set deployment to succeed on pod availability
 curl  -f -X PATCH --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/deltas/$DELTA_ID \
   --header 'Content-Type: application/json' \
   --data-raw '[{
@@ -48,14 +50,14 @@ curl  -f -X PATCH --header "Authorization: Bearer $HUMANITEC_SECRET" https://api
                       "op": "add",
                       "path": "/deploy",
                       "value": {
-                        "success": "available",
-                        "timeout": 300
+                        "success": "available"
                       }
                     }]
                   }
                 }
               }]'
 
+echo Excecute deployment
 DEPLOY_ID=$(curl -f -X POST --header "Authorization: Bearer $HUMANITEC_SECRET" https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$TARGET_ENV/deploys \
   --header 'Content-Type: application/json' \
   --data-raw '{ "comment": "Deploy delta from score", "delta_id": "'$DELTA_ID'" }')
