@@ -19,8 +19,8 @@ const requestHandler = async (request, response) => {
         <h1>Hello World, I'm Ginger!</h1>
         <p><b>TODS_URL:</b> ${url}</p>
         <p><b>Time of day:</b> ${tod}</p>
-      </div>
-      <div>Commit SHA: ${process.env.GITHUB_SHA}</div>
+        <p><b>Commit SHA:</b> ${process.env.GITHUB_SHA}</p>
+        </div>
     </body>
   </html>
   `

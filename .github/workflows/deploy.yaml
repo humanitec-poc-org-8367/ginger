@@ -71,6 +71,10 @@ jobs:
           curl -fSs -X DELETE https://api.humanitec.io/orgs/htc-demo-04/apps/ginger/envs/$CI_ENV_ID \
             --header 'Authorization: Bearer ${{ secrets.HUMANITEC_TOKEN_POC_4 }}'
 
+      - name: deploy to Development
+        run: |
+          ./deploy_to.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" Development
+
       - name: promote to UAT
         run: |
           ./deploy_to.sh "${{ secrets.HUMANITEC_ORG_ID_POC_4 }}" "${{ secrets.HUMANITEC_TOKEN_POC_4 }}" uat
