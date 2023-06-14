@@ -16,12 +16,6 @@ containers:
     variables:
       PORT: "3000"
       TODS_URL: ${resources.time-of-day-svc.url}
-
-#      DB_DATABASE: ${resources.db.name}
-#      DB_USER: ${resources.db.username}
-#      DB_PASSWORD: ${resources.db.password}
-#      DB_HOST: ${resources.db.host}
-#      DB_PORT: ${resources.db.port}
     livenessProbe:
       httpGet:
         path: /
@@ -40,13 +34,3 @@ resources:
     type: s3
     properties:
       url:
-
-#  db:  # We need a database to store data
-#    type: mysql
-#    properties:
-#      name:
-#      username:
-#      password:
-#      host:
-#      port:
-
