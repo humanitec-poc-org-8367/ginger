@@ -1,38 +1,30 @@
 const http = require('http');
-// const mysql = require('mysql2');
-
-// create the connection to database
-// const connection = mysql.createConnection({
-//   host: process.env.DB_HOST || 'localhost'  ,
-//   user: process.env.DB_USER || 'root',
-//   password: process.env.DB_PASSWORD || 'secret',
-//   database: process.env.DB_DATABASE || 'score',
-//   port: process.env.DB_PORT || 3306
-// });
 
 const requestHandler = async (request, response) => {
   console.log('Received request from ' + request.hostname);
 
-  // Run hello world query
-  //const [rows, fields] = await connection.promise().query('SELECT "This is an example application deployed with Score!" as message');
-
-  //const message = rows[0].message;
-  const message = 'Testing 1 2 3'
+  const url = process.env.TODS_URL;
+  console.log(`GET time of day: url=${url}`);
+  const r = await fetch(url);
+  const body = await r.json();
+  const tod = body.timeOfDay
+  console.log(`response: tod=${tod}`);
 
   const html = `
   <html>
     <body>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-      <div class="container text-center mt-5 pt-5">
+      <div class="container text-left mt-5 pt-5">
         <h1>Hello World, I'm Ginger!</h1>
-        <p>${message}</p>
+        <p><b>TODS_URL:</b> ${url}</p>
+        <p><b>Time of day:</b> ${tod}</p>
       </div>
       <div>Commit SHA: ${process.env.GITHUB_SHA}</div>
     </body>
   </html>
   `
-  console.log('Sending response');
+
   response.end(html);
 }
 
